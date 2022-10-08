@@ -1,3 +1,12 @@
 from django.contrib import admin
+from .models import Ingredient
 
-# Register your models here.
+# Register Ingredient model to admin site
+@admin.register(Ingredient)
+class IngredientAdmin(admin.ModelAdmin):
+    list_display = [
+        'name' , 
+        'quantity' , 
+        'unit_price' , 
+        'unit' 
+    ]

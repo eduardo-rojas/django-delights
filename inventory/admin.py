@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Ingredient, MenuItem, RecipeRequirement, Purchase, Profile
 
+
 # Register Ingredient model to admin site
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
@@ -26,13 +27,14 @@ class RecipeRequirementAdmin(admin.ModelAdmin):
 
 @admin.register(Purchase)
 class PurchaseAdmin(admin.ModelAdmin):
-    list_display = ['menu_item', 'timestamp', 'total_price', 'slug']
-    list_filter = ['menu_item', 'timestamp','total_price']
-    prepopulated_fields = {'slug': ('id', 'timestamp' )}
+    list_display = ['menu_item', 'timestamp', 'total_price', 'slug', 'profile']
+    list_filter = ['menu_item', 'timestamp','total_price', 'profile']
+    prepopulated_fields = {'slug': ('menu_item', 'profile')}
 
 @admin.register(Profile)
 class Profile(admin.ModelAdmin):
-    list_display = ['user', 'date_of_birth', 'created', 
-                    'updated', 'purchase_dispatched']
+    list_display = ['user', 'first_name', 'last_name', 'date_of_birth', 'created', 
+                    'updated']
     list_filter = ['user', 'date_of_birth']
-    prepopulated_fields = {'slug': ('user',  )}
+    prepopulated_fields = {'slug': ('first_name', 'last_name', 'user'  )}
+

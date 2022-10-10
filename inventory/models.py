@@ -3,6 +3,26 @@ from django.conf import settings
 
 # Model: Ingredient
 class Ingredient(models.Model):
+
+    # Constant Unit choices class
+    class Unit(models.TextChoices):
+        POUND = 'lb', 'Pounds'
+        OUNCES = 'OU', 'Ounces'
+        FLUID_OUNCE = 'FO', 'Fluid Ounces'
+        LITER = 'L', 'Liters'
+        TEASPOON = 't', 'Teaspoons'
+        TABLESPOON = 'T', 'Tablespoons'
+        CUP = 'C', 'Cups'
+        PINT = 'PT', 'Pints'
+        QUART = 'QT', 'Quarts'
+        GALLON = 'GAL', 'Gallons' 
+        MILLILITER = 'ML', 'Milliliters'
+        MILLIGRAM = 'MG', 'Milligrams'
+        GRAM = 'g', 'Grams'
+        KILOGRAM = 'kg', 'Kilograms'
+        OTHER = 'OT', 'Other'
+
+
     # Fields
     name = models.CharField(max_length=30)
     quantity = models.FloatField()
@@ -11,7 +31,9 @@ class Ingredient(models.Model):
     unit_price = models.DecimalField(max_digits=10, 
                                     decimal_places=2)
     slug = models.SlugField(max_length=200)
-    unit = models.CharField(max_length=30)
+    unit = models.CharField(max_length=3,
+                            choices=Unit.choices,
+                            default=Unit.OTHER)
 
     # Meta class with attributes to order ingredients by name
     # Database Index to improve query performance
@@ -75,6 +97,24 @@ class RecipeRequirement(models.Model):
     def __str__(self):
         return f'Recipe for {self.menu_item} with ingredient {self.ingredient}'
     
+
+# Model: Profile
+class Profile(models.Model):
+    # Fields
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=40)
+    last_name = models.CharField(max_length=40)
+    email = models.EmailField(max_length=40)
+    date_of_birth = models.DateField(blank=True, null=True)
+    photo = models.ImageField(upload_to="inventory/%Y/%m/%d")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(max_length=200)
+    
+    def __str__(self):
+        return f'Profile of {self.first_name} {self.last_name}'
+
 # Model: Purchase
 class Purchase(models.Model):
     # Fields
@@ -85,6 +125,10 @@ class Purchase(models.Model):
     total_price = models.DecimalField(max_digits=10,
                                     decimal_places=2)
     slug = models.SlugField(max_length=200)
+    profile = models.ForeignKey(Profile,
+                                on_delete=models.CASCADE,
+                                related_name='profile_purchases')
+
 
     # Meta class. Order by total_price
     ordering = ['total_price']
@@ -97,25 +141,3 @@ class Purchase(models.Model):
     def __str__(self):
         return f'Purchase with id#: {self.id} - Date:{self.timestamp} - Total: ${self.total_price}'
     
-# Model: Profile
-class Profile(models.Model):
-    # Fields
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE)
-    date_of_birth = models.DateField(blank=True, null=True)
-    photo = models.ImageField(upload_to="inventory/%Y/%m/%d")
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    purchase_dispatched = models.ForeignKey(Purchase,
-                                        on_delete=models.CASCADE,
-                                        related_name='profile_purchase')
-    slug = models.SlugField(max_length=200)
-    
-    def __str__(self):
-        return f'Profile of {self.username}'
-    
-
-
-
-    
-

@@ -5,9 +5,44 @@
     <link href="{% static "css/base.css" %}" rel="stylesheet">
 </head>
 <body>
-    <div id="header">
+
+
+
+    {% comment %} Header {% endcomment %}
+    <header id="header">
         <span class="logo">Django Delights</span>
-    </div>
+        {% if request.user.is_authenticated %}
+        <ul class="menu">
+            <li {% if section == 'dashboard' %} class='selected' {% endif %}>
+                <a href="{% url "dashboard" %}">My dashboard</a>
+            </li>
+            <li {% if section == "Purchases" %} class="selected" {% endif %} >
+                <a href="#">Purchases</a>
+            </li>
+            <li {% if section == "MenuItems" %} class="selected" {% endif %} >
+                <a href="#">Menu Items</a>
+            </li>
+            <li {% if section == "RecipeItems" %} class="selected" {% endif %} >
+                <a href="#">Recipe Items</a>
+            </li>
+            <li {% if section == "Inventory" %} class="selected" {% endif %} >
+                <a href="#">Inventory</a>
+            </li>
+            <li {% if section == "Log out" %} class="selected" {% endif %} >
+                <a href="{% url "logout" %}">Log out</a>
+            </li>
+        </ul>
+        {% endif %}
+        <span class="user">
+            {% if request.user.is_authenticated %}
+                Hello {{ current_user.first_name | default:request.user.username }} {{ current_user.last_name }}
+            {% else %}
+                <a href="{% url "login"  %}">Log-in</a>
+            {% endif %}
+        </span>
+    </header>
+
+    {% comment %} Content {% endcomment %}
     <div id="content">
         {% block content %}
         {% endblock %}

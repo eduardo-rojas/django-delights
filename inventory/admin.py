@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ingredient, MenuItem, RecipeRequirement, Purchase, Profile
+from .models import Ingredient, MenuItem, RecipeRequirement, Purchase
 
 
 # Register Ingredient model to admin site
@@ -31,10 +31,4 @@ class PurchaseAdmin(admin.ModelAdmin):
     list_filter = ['menu_item', 'timestamp','total_price', 'profile']
     prepopulated_fields = {'slug': ('menu_item', 'profile')}
 
-@admin.register(Profile)
-class Profile(admin.ModelAdmin):
-    list_display = ['user', 'first_name', 'last_name', 'date_of_birth', 'created', 
-                    'updated']
-    list_filter = ['user', 'date_of_birth']
-    prepopulated_fields = {'slug': ('first_name', 'last_name', 'user'  )}
 

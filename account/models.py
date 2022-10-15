@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 # Model: Profile
 class Profile(models.Model):
     # Fields

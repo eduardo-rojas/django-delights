@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from account.models import Profile 
+from django.urls import reverse
 
 # Model: Ingredient
 class Ingredient(models.Model):
@@ -47,6 +48,11 @@ class Ingredient(models.Model):
     # String method returns readable ingredient instance name
     def __str__(self):
         return self.name
+    
+    # Absolute URL
+    def get_absolute_url(self):
+        return reverse("inventory:ingredient_detail", kwargs={"pk": self.pk})
+    
     
 # Model: MenuItem
 class MenuItem(models.Model):

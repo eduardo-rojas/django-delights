@@ -44,8 +44,8 @@ urlpatterns = [
     
     # Dashboard
     path('', include('django.contrib.auth.urls')),
-    path('', views.dashboard, name='dashboard'),
+    path('', views.home, name='home'),
     path('register/', views.register, name='register'),
-    path('edit/', views.edit, name='edit')
+    path('editprofile/', views.edit, name='editprofile')
     
 ]

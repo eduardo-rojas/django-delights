@@ -26,4 +26,7 @@ urlpatterns = [
     path("purchase/update/<pk>", views.PurchaseUpdate.as_view(), name="purchaseupdate"),
     path("purchase/delete/<pk>", views.PurchaseDelete.as_view(), name="purchasedelete"),
 
+    # Menu
+    path("menu", views.menu, name="menu")
+
 ]

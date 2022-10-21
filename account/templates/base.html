@@ -13,8 +13,8 @@
         <span class="logo">Django Delights</span>
         {% if request.user.is_authenticated %}
         <ul class="menu">
-            <li {% if section == 'dashboard' %} class='selected' {% endif %}>
-                <a href="{% url "dashboard" %}">My dashboard</a>
+            <li {% if section == 'Home' %} class='selected' {% endif %}>
+                <a href="{% url "home" %}">My dashboard</a>
             </li>
             <li {% if section == "Purchases" %} class="selected" {% endif %} >
                 <a href="{% url 'purchaselist' %}">Purchases</a>
@@ -27,6 +27,9 @@
             </li>
             <li {% if section == "Inventory" %} class="selected" {% endif %} >
                 <a href="{% url 'ingredientlist' %} ">Inventory</a>
+            </li>
+            <li {% if section == "Account" %} class="selected" {% endif %} >
+                <a href="{% url 'editprofile' %} ">Account</a>
             </li>
             <li {% if section == "Log out" %} class="selected" {% endif %} >
                 <a href="{% url "logout" %}">Log out</a>

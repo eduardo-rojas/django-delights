@@ -9,12 +9,12 @@ from django.contrib import messages
 
 # View for Home page
 @login_required
-def dashboard(request):
+def home(request):
     # username = request.user.id
     # current_user = Profile.objects.get(user_id=username)
     return render(request, 
-                    'account/dashboard.html',
-                    {'section': 'dashboard'})
+                    'account/home.html',
+                    {'section': 'Home'})
                     #'current_user': current_user
 
 # View to Register new account

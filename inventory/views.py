@@ -3,8 +3,19 @@ from .models import Ingredient, MenuItem, RecipeRequirement, Purchase
 from django.views.generic import  ListView
 from django.views.generic.edit import CreateView, DeleteView,  UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
+def menu(request):
+    
+    menu_items = MenuItem.objects.all()
+    recipie_requirements = RecipeRequirement.objects.all()
+    context = { "menu_items": menu_items,
+                "recipie_requirements": recipie_requirements}
+    return render(request, 'inventory/menu.html', context)
+
+# CRUD Section ------
 
 # Ingredient: CRUD class-based views
 

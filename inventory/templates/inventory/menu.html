@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Menu{% endblock %}
+{% block content %}
+    This is the Menu:
+    <ul>    
+        {% for menu_item in menu_items %}
+            <li>{{ menu_item.title }}. -- ${{ menu_item.price }}</li>
+            <p>Ingredients:</p>
+            {% for recipie_requirement in recipie_requirements %}
+                <ul>
+                    {% if recipie_requirement.menu_item == menu_item %}
+                    <li>{{ recipie_requirement.ingredient }}: {{ recipie_requirement.quantity }}. {{ recipie_requirement.ingredient.unit }}</li>
+                    {% endif%}
+                </ul>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+    
+
+{% endblock %}

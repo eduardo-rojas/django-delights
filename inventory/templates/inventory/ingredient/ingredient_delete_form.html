@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Ingredient {% endblock %}
+
+{% block content %}
+<form method="post">
+{% csrf_token %}
+    <div id="delete-form"> 
+    <p>Please confirm that you want to delete "{{ object.name }}"</p>
+    <input type="submit" value="Confirm" />
+    </div>
+</form>
+{% endblock%}

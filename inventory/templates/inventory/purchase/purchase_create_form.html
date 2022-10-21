@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Purchase {% endblock %}
+
+{% block content %}
+
+    <h2>Create Purchase</h2>
+
+    <form method="post">
+        <div>
+            {% csrf_token %} {{ form.as_p }}
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+
+{% endblock %}

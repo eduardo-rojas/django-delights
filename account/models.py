@@ -12,4 +12,4 @@ class Profile(models.Model):
     slug = models.SlugField(max_length=200)
     
     def __str__(self):
-        return f'Profile of {self.user.first_name} {self.user.last_name}'
+        return f'{self.user.first_name} {self.user.last_name}'

@@ -17,13 +17,13 @@
                 <a href="{% url "dashboard" %}">My dashboard</a>
             </li>
             <li {% if section == "Purchases" %} class="selected" {% endif %} >
-                <a href="#">Purchases</a>
+                <a href="{% url 'purchaselist' %}">Purchases</a>
             </li>
             <li {% if section == "MenuItems" %} class="selected" {% endif %} >
-                <a href="#">Menu Items</a>
+                <a href="{% url 'menuitemlist' %}">Menu Items</a>
             </li>
             <li {% if section == "RecipeItems" %} class="selected" {% endif %} >
-                <a href="#">Recipe Items</a>
+                <a href="{% url 'reciperequirementlist' %}">Recipe Items</a>
             </li>
             <li {% if section == "Inventory" %} class="selected" {% endif %} >
                 <a href="{% url 'ingredientlist' %} ">Inventory</a>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Recipe Requirement {% endblock %}
+
+    
+
+{% block content %}
+
+<a href="{% url 'reciperequirementcreate' %}"><button> Add new Recipe Requirement</button> </a> 
+
+<table id="main-table-list">
+<thead>
+    <tr>
+        <th>Quantity</th>
+        <th>Menu Item</th>
+        <th>Ingredient</th>
+        <th>Created</th>
+        <th></th>
+        <th></th>
+    </tr>
+</thead>
+<tbody>
+    {% for reciperequirement in reciperequirement_list %}
+    <tr>
+        <td>{{ reciperequirement.quantity }}</td>
+        <td>{{ reciperequirement.menu_item }}</td>
+        <td>{{ reciperequirement.ingredient }}</td>
+        <td>{{ reciperequirement.created }}</td>
+        <td ><a href="{% url 'reciperequirementupdate' reciperequirement.id  %}">Edit</a></td>
+        <td ><a href="{% url 'reciperequirementdelete' reciperequirement.id  %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

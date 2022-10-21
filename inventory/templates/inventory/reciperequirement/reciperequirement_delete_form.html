@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Recipe Requirement {% endblock %}
+
+{% block content %}
+<form method="post">
+{% csrf_token %}
+    <div id="delete-form"> 
+    <p>Please confirm that you want to delete ingredient: "{{ object.ingredient }}"
+         of menu item: {{ object.menu_item }}</p>
+    <input type="submit" value="Confirm" />
+    </div>
+</form>
+{% endblock%}

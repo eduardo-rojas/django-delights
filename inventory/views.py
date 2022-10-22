@@ -4,8 +4,12 @@ from django.views.generic import  ListView
 from django.views.generic.edit import CreateView, DeleteView,  UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.db.models import Sum
+from decimal import Decimal
+import math
 
-
+# Display Restaurant Menu
 @login_required
 def menu(request):
     
@@ -15,7 +19,58 @@ def menu(request):
                 "recipie_requirements": recipie_requirements}
     return render(request, 'inventory/menu.html', context)
 
-# CRUD Section ------
+# Display total revenue, total cost of ingredients used 
+# and total profit(revenue - cost)
+@login_required
+def revenue_report(request):
+
+    #------ Total Revenue ------
+    total_revenue = Purchase.objects.aggregate(Sum('total_price'))
+    total_revenue = float(total_revenue['total_price__sum'])
+
+    #------ Total cost of ingredients ------
+
+    #purchase_menu_items_ids = Purchase.objects.values_list('menu_item', flat=True) 
+    total_cost = 0
+    menu_item_total_cost = 0
+
+    # 1. Obtain total sells per Menu Item
+    purchases = Purchase.objects.all().values('menu_item').annotate(total=Count("menu_item"))
+	#Example Query : <QuerySet [{'menu_item': 1, 'total': 2}, {'menu_item': 2, 'total': 1}]>
+    
+    # 2. Obtain total price per Menu Item (sum price of each ingredient)
+	# ----------------
+    for index in range(len(purchases)):
+        # Multiply each menu item total price by the times it was sold
+        if menu_item_total_cost > 0 :
+            total_cost += menu_item_total_cost * purchases[index]['total']
+        # Variable menu_item_total_cost represents the sum of the price
+        # of all required ingredients per menu item
+        menu_item_total_cost = 0
+        # menu_item_id is used to query all ingredients per recipie
+        menu_item_id = purchases[index]['menu_item']
+        recipe_ingredients = RecipeRequirement.objects.filter(menu_item= menu_item_id)
+        # Example Query: <QuerySet [<RecipeRequirement: Recipe for Django Djaffa Cake with ingredient Flour>, 
+	    # 			<RecipeRequirement: Recipe for Django Djaffa Cake with ingredient Large Egg>, 
+	    # 			<RecipeRequirement: Recipe for Django Djaffa Cake with ingredient Cane Sugar>, 
+	    # 			<RecipeRequirement: Recipe for Django Djaffa Cake with ingredient Milk Chocolate>,
+	    # 			<RecipeRequirement: Recipe for Django Djaffa Cake with ingredient Orange Jelly>]>	
+	    # For loop to obtain total price for a Menu Item per ingredient, 
+        # considering quantity of each ingredient per recipie
+        for item in recipe_ingredients:
+            ingredient_price = item.quantity * float(item.ingredient.unit_price)
+            menu_item_total_cost += ingredient_price
+
+    # Total Profit ------
+    profit = total_revenue - total_cost
+    # Context variable
+    context = { "total_revenue":  '${:,.2f}'.format(total_revenue),
+                "total_cost":  '${:,.2f}'.format(total_cost),
+                "profit": '${:,.2f}'.format(profit)}
+    
+    return render(request, 'inventory/revenue_report.html', context)
+
+# ------ CRUD Section ------
 
 # Ingredient: CRUD class-based views
 
@@ -101,8 +156,10 @@ class PurchaseCreate(LoginRequiredMixin, CreateView):
 class PurchaseUpdate(LoginRequiredMixin, UpdateView):
     model = Purchase
     template_name = "inventory/purchase/purchase_update_form.html"
-    fields = ["menu_item",    "profile"]
+    fields = ["menu_item",   "profile"]
     success_url = "/inventory/purchase/list"
+
+# Purchase Update View
 
 class PurchaseDelete(LoginRequiredMixin, DeleteView):
     model = Purchase

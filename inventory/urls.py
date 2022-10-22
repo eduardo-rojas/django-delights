@@ -27,6 +27,9 @@ urlpatterns = [
     path("purchase/delete/<pk>", views.PurchaseDelete.as_view(), name="purchasedelete"),
 
     # Menu
-    path("menu", views.menu, name="menu")
+    path("menu", views.menu, name="menu"),
+
+    # Revenue Report
+    path("revenue_report", views.revenue_report, name="revenuereport"   ),
 
 ]
